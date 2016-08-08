@@ -31,6 +31,8 @@ Enemy.prototype.render = function() {
 };
 
 Enemy.prototype.collision = function() {
+  //if both player and bug in same x,y range
+  // then reset
 
 }
 // Now write your own player class
@@ -64,7 +66,15 @@ Player.prototype.handleInput = function(direction) {
 
 
   switch(direction) {
-    case 'up' : if (this.y < 0) break;
+    case 'up' : if (this.y == 40){
+                    _this = this;
+                    this.y -= 90;
+                    setTimeout(function(){
+                      //to cut out the floating head when reached water
+                      ctx.clearRect(0, 0, 505, 100);
+                        _this.reset();
+                      }, 200);
+                    }
                 else this.y -= 90; break;
     case 'down': if (this.y == 400) break;
                 else this.y += 90; break;
@@ -75,6 +85,12 @@ Player.prototype.handleInput = function(direction) {
   }
 
 
+}
+//if player reaches water reset maintain scores
+//if player collision reset, scores 0.
+Player.prototype.reset = function() {
+    this.x = 200;
+    this.y = 400;
 }
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
