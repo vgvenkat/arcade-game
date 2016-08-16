@@ -20,7 +20,7 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     // console.log(dt);
      this.x = this.x +this.speed* dt ;
-     //this.y = this.y * dt;
+     this.collision();
 
 };
 
@@ -34,6 +34,13 @@ Enemy.prototype.collision = function() {
   //if both player and bug in same x,y range
   // then reset
 
+  if( (Math.abs(player.x - this.x) <=20)
+    && (Math.abs(player.y - this.y) <= 30) ){
+    gameOver = true;
+    console.log('Enemny', this.x, this.y)
+    console.log('Player', player.x, player.y)
+
+  }
 }
 // Now write your own player class
 // This class requires an update(), render() and
@@ -89,20 +96,47 @@ Player.prototype.handleInput = function(direction) {
 //if player reaches water reset maintain scores
 //if player collision reset, scores 0.
 Player.prototype.reset = function() {
+    console.log('reseting player');
     this.x = 200;
     this.y = 400;
+
 }
+
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
+
+//set gameover state to false for initially
+
+var gameOver = false;
+//start off with 4 bugs
 var bug1 = new Enemy(30, 130, 100);
-var bug2 = new Enemy(50, 210, 300);
-var bug3 = new Enemy(30, 60, 50);
-var bug4 = new Enemy(20, 130, 500);
+var bug2 = new Enemy(50, 130, 300);
+var bug3 = new Enemy(30, 210, 50);
+var bug4 = new Enemy(20, 300, 500);
+
+var allEnemies = [bug1, bug2, bug3, bug4];
+
+
+window.setInterval(function(){
+  for (var i=0; i<2; i++) {
+    var startx = Math.floor(Math.random()*99) + 1;
+    startx *= Math.floor(Math.random()*2) == 1 ? 1 : -1;
+    var starty = Math.floor(Math.random()*90) + 1;
+    console.log()
+    var speedbug = Math.random();
+     speedbug *= Math.floor(Math.random()*2) == 1 ? 500 : 1000;
+      allEnemies.push(new Enemy(startx, starty, speedbug));
+
+  }
+  //if there are more than 20 bugs then drop first 20.
+  if (allEnemies.length > 20) allEnemies.splice(0,20)
+  return allEnemies;
+}, 3000);
 
 var player = new Player(200, 400);
 
-var allEnemies = [bug1, bug2, bug3, bug4];
 
 
 
@@ -118,3 +152,6 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+var buttonReset = document.createElement('button');
+buttonReset.innerHTML = 'click to reset';
+document.body.appendChild(buttonReset);

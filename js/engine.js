@@ -24,7 +24,6 @@ var Engine = (function(global) {
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
         lastTime;
-
     canvas.width = 505;
     canvas.height = 606;
     doc.body.appendChild(canvas);
@@ -56,7 +55,18 @@ var Engine = (function(global) {
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
          */
-        win.requestAnimationFrame(main);
+         if(!gameOver){
+           console.log('game resettting');
+            win.requestAnimationFrame(main);
+          }
+
+          buttonReset.addEventListener('click', function () {
+            gameOver = false;
+            //win.requestAnimationFrame(main);
+            player.reset();
+
+            console.log('calling reset')
+          });
     }
 
     /* This function does some initial setup that should only occur once,
@@ -159,7 +169,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        //noop
+        gameOver = false;
     }
 
     /* Go ahead and load all of the images we know we're going to need to
